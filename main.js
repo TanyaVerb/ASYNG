@@ -223,6 +223,29 @@ try {
 
 //Пример
 
+// try {
+//   throw new CustomError("Привет, как дела? Исправь ошибку");
+// } catch (e) {
+//   console.log(e);
+//   console.log(e.name);
+//   console.log(e.message);
+//   console.log(e.stack);
+// }
+
+// console.log("Скрипт дошел до конца");
+// const btnEl = document.querySelector(".btn");
+// const signEl = document.getElementById("sign");
+// const signs = ["+", "-", "/", "*"];
+// function generateSign() {
+//   const currentSign = document.getElementById("sign").textContent;
+//   const signsNew = signs.filter((sign) => sign !== currentSign);
+//   const randomIndex = Math.floor(Math.random() * signsNew.length);
+//   const randomSing = signs[randomIndex];
+//   signEl.textContent = randomSing;
+// }
+
+// btnEl.addEventListener("click", generateSign);
+
 class CustomError extends Error {
   constructor(mes) {
     super(mes);
@@ -233,7 +256,9 @@ class CustomError extends Error {
   }
 
   somethingDo() {
-    console.log(1);
+    fetch("https://jsonplaceholder.typicode.com/todos/1")
+      .then((response) => response.json())
+      .then((json) => console.log(json));
   }
 }
 
@@ -246,4 +271,74 @@ try {
   console.log(e.stack);
 }
 
-console.log("Скрипт дошел до конца");
+class ApiError extends Error {
+  constructor(mes) {
+    super(mes);
+    this.name = this.constructor.name;
+    this.stack = new Error().stack;
+  }
+}
+
+class AuthError extends ApiError {
+  constructor(mes, role) {
+    super(mes);
+    this.userRole = role;
+  }
+}
+const obj = {
+  name: "Vlad",
+  age: 32,
+  hasRole: false,
+};
+
+function checkAuthToken(objUserData) {
+  try {
+    if (!objUserData.hasRole) {
+      // проверка, зарегистрирован ли пользователь (если hasRole равно false).
+      throw new AuthError("Вы не зарегистрированы");
+    } else {
+      //some code...,который обрабатывает аутентификацию
+    }
+  } catch (error) {
+    // console.log(error);
+    // console.log(error.name);
+    // console.log(error.message);
+
+    if (error instanceof AuthError) {
+      //some code
+      console.log("error instanceof AuthError");
+    } else {
+      console.log("не дойдет");
+    }
+
+    // console.log(e instanceof AuthError);//ссылается на конструкторы от кот. наследуется
+  }
+}
+
+//1
+
+class MyClass {}
+class AnotherClass {}
+
+// const obj1 = new MyClass()
+// const obj2 = new AnotherClass()
+
+// console.log(obj1 instanceof MyClass);
+
+//2
+//  const obj1 = new MyClass()
+//  const obj2 = new AnotherClass()
+//  console.log(obj1.constructor=== MyClass);
+//  console.log(obj1.constructor.name=== "MyClass");
+
+//3
+//Метод Object.getPrototypeOf() возвращает прототип (то есть, внутреннее свойство [[Prototype]]) указанного объекта.
+const obj1 = new MyClass();
+const obj2 = new AnotherClass();
+console.log(Object.getPrototypeOf(obj1) === MyClass.prototype); //ссылается на прототайп родителя
+
+console.log(Object.getPrototypeOf(obj2) === MyClass.prototype);
+
+checkAuthToken(obj);
+
+console.log(123);

@@ -207,17 +207,17 @@ async function getTodos() {
     console.log(data);
 
     const todoList = data.filter((todo) => todo.completed);
-    const html = renderTodo();
+    const html = renderTodo(todoList);
+    document.querySelector("ul").innerHTML = html; // Вставляем HTML в существующий список
+    // document.body.insertAdjacentHTML("afterbegin", html);
 
     console.log(todoList);
 
     return todoList;
-  } catch (error) {}
+  } catch (error) {
+    console.error("Ошибка:", error); // Выводим ошибку в консоль
+  }
 }
-
-// const result2 = getTodos();
-
-// console.log(result2);
 
 btnEl.addEventListener("click", getTodos);
 
@@ -226,20 +226,16 @@ function renderTodo(todos) {
     .map((item) => {
       return ` <li>${item.title}</li>`;
     })
-    .json("");
-  return `<ul>
-      <li>${item}</li>
-    </ul>`;
+    .join("");
+  return `<ul>${items}</ul>`;
 }
-
-getTodos();
 
 // const observer = new IntersectionObserver();
 
 async function getImg() {
-  let response = await fetch("./images.jpg");
+  let response = await fetch("./dog.jpg");
   // console.log(response);
-  const img = response.blob();
+  const img = await response.blob();
   console.log(img);
   const url = URL.createObjectURL(img);
   console.log(url);

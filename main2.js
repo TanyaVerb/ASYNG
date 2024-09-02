@@ -138,3 +138,117 @@ console.log("end");
 //микротаски st1 pr2
 //макротаски stInto resolve ST2
 //result -> "start" exst exf end
+
+console.log("");
+//============================
+
+/**
+ * fetch("https://jsonplaceholder.typicode.com/users/1")
+ * .then(result=>{
+ * console.log(result)
+ * if(!result.ok)throw new Error('Запрос не успешен!')
+ *  const body =result.json()
+ * console.log(body)
+ * return body
+ * })
+ * .then(body =>{
+ * * console.log(body)
+ * })
+ * .catch((e)=>{
+ *  console.log(e)
+ *
+ * })
+ * .finally(()=>{
+ * console.log('Запрос завершен')
+ * })
+ *
+ *
+ */
+
+/** */
+
+// const baseUrl = "";
+
+// async function getUser(userId) {
+//   try {
+//     const response = await fetch(`${baseUrl}/users/${userId}`);
+//     if (!response.ok) {
+//       throw new Error("Запрос не успешен!");
+//     }
+//     const user = await response.json();
+//     console.log(user);
+//   } catch (e) {
+//     console.log(e);
+//   } finally {
+//     console.log("Запрос завершен");
+//   }
+// }
+
+// const result = getUser(10);
+
+// console.log(result);
+
+const baseUrl2 = "https://jsonplaceholder.typicode.com/todos";
+
+//список дел с отображением заголовка (title), только в состоянии completed
+//обработать ошибку Try catch
+
+const btnEl = document.querySelector(".btn");
+console.log(btnEl);
+
+async function getTodos() {
+  try {
+    const response = await fetch(`${baseUrl2}`);
+    if (!response.ok) {
+      throw new Error("Запрос не успешен!");
+    }
+    const data = await response.json();
+
+    console.log(data);
+
+    const todoList = data.filter((todo) => todo.completed);
+    const html = renderTodo();
+
+    console.log(todoList);
+
+    return todoList;
+  } catch (error) {}
+}
+
+// const result2 = getTodos();
+
+// console.log(result2);
+
+btnEl.addEventListener("click", getTodos);
+
+function renderTodo(todos) {
+  const items = todos
+    .map((item) => {
+      return ` <li>${item.title}</li>`;
+    })
+    .json("");
+  return `<ul>
+      <li>${item}</li>
+    </ul>`;
+}
+
+getTodos();
+
+// const observer = new IntersectionObserver();
+
+async function getImg() {
+  let response = await fetch("./images.jpg");
+  // console.log(response);
+  const img = response.blob();
+  console.log(img);
+  const url = URL.createObjectURL(img);
+  console.log(url);
+
+  const picture = document.createElement("img");
+  picture.style = "width: 150px; height:150px";
+  picture.src = url;
+
+  document.body.append(picture);
+}
+
+getImg();

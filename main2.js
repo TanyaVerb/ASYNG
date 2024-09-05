@@ -5,9 +5,9 @@ const userData = {
 
 class MyPromise {
   constructor(executor) {
-    this.lineHandlers = [];
-    this.errorHandler = () => {};
-    this.finallyHandler = () => {};
+    this.lineHandlers = []; //массив для хранения функций,кот.будут вызваны по цепочке при вызове then
+    this.errorHandler = () => {}; //Функция-заглушка для обработки ошибок. По умолчанию она ничего не делает
+    this.finallyHandler = () => {}; //Функция-заглушка для выполнения кода после завершения Promise (независимо от результата)
 
     try {
       executor(this.resolve.bind(this), this.reject.bind(this));
@@ -30,16 +30,16 @@ class MyPromise {
     //необходима для чейнинга then
     this.lineHandlers.push(fn);
     //возвращает объект который содержит все методы инстанса класса
-    return this;
+    return this; // Возвращает ссылку на сам объект MyPromise. Это позволяет использовать цепочку вызовов (chaining) для then
   }
   catch(fn) {
-    this.errorHandler = fn;
+    this.errorHandler = fn; //Заменяет функцию errorHandler на переданную функцию fn
     return this;
   }
 
   finally(fn) {
-    this.finallyHandler = fn;
-    return this;
+    this.finallyHandler = fn; //Заменяет функцию finallyHandler на переданную функцию fn
+    return this; //Возвращает ссылку на сам объект MyPromise
   }
 }
 
@@ -79,22 +79,22 @@ class MyPromise {
 // console.log(promise1);
 // // promise1.then(r=>)
 
-// const promise = fetch("https://jsonplaceholder.typicode.com/photos/1");
+const promise = fetch("https://jsonplaceholder.typicode.com/photos/1");
 
 const img = document.querySelector(".img");
 const title = document.querySelector(".title");
 
-// promise
-//   .then((data) => {
-//     const result = data.json();
-//     console.log(result);
-//     return result;
-//   })
-//   .then((response) => {
-//     console.log(response);
-//     img.src = response.thumbnailUrl;
-//     title.innerHTML = response.title;
-//   });
+promise
+  .then((data) => {
+    const result = data.json();
+    console.log(result);
+    return result;
+  })
+  .then((response) => {
+    console.log(response);
+    img.src = response.thumbnailUrl;
+    title.innerHTML = response.title;
+  });
 
 console.log("start");
 
@@ -104,42 +104,42 @@ function foo() {
   }, 0);
 }
 
-const promise = new Promise((resolve) => {
-  console.log("executor start");
-  setTimeout(() => {
-    console.log("setTimeout into promise");
-    resolve("resolve");
-  });
-  console.log("executor finish");
-});
+// const promise = new Promise((resolve) => {
+//   console.log("executor start");
+//   setTimeout(() => {
+//     console.log("setTimeout into promise");
+//     resolve("resolve");
+//   });
+//   console.log("executor finish");
+// });
 
-Promise.resolve("resolve2")
-  .then(() => {
-    console.log("promise2");
-  })
-  .then(() => {
-    console.log("promise2");
-  });
-promise
-  .then(() => {
-    console.log("promise1");
-  })
-  .then(() => {
-    console.log("promise1");
-  });
-setTimeout(() => {
-  console.log("setTimeout 2");
-}, 0);
+// Promise.resolve("resolve2")
+//   .then(() => {
+//     console.log("promise2");
+//   })
+//   .then(() => {
+//     console.log("promise2");
+//   });
+// promise
+//   .then(() => {
+//     console.log("promise1");
+//   })
+//   .then(() => {
+//     console.log("promise1");
+//   });
+// setTimeout(() => {
+//   console.log("setTimeout 2");
+// }, 0);
 
-foo();
-console.log("end");
+// foo();
+// console.log("end");
 
 //синхронный код
 //микротаски st1 pr2
 //макротаски stInto resolve ST2
 //result -> "start" exst exf end
 
-console.log("");
+// console.log("");
 //============================
 
 /**
@@ -208,7 +208,7 @@ async function getTodos() {
 
     const todoList = data.filter((todo) => todo.completed);
     const html = renderTodo(todoList);
-    document.querySelector("ul").innerHTML = html; // Вставляем HTML в существующий список
+    document.querySelector(".list").innerHTML = html; // Вставляем HTML в существующий список
     // document.body.insertAdjacentHTML("afterbegin", html);
 
     console.log(todoList);
@@ -226,7 +226,7 @@ function renderTodo(todos) {
     .map((item) => {
       return ` <li>${item.title}</li>`;
     })
-    .join("");
+    .join("!!!!!!");
   return `<ul>${items}</ul>`;
 }
 

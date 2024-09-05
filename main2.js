@@ -248,3 +248,154 @@ async function getImg() {
 }
 
 getImg();
+
+// function foo() {
+//   try {
+//     return 1;
+//   } finally {
+//     console.log(1);
+//   }
+// }
+
+// console.log(1);
+
+// function foo2() {
+//   return 2;
+//   try {
+//     console.log("try");
+//   } finally {
+//     console.log(1);
+//   }
+// }
+
+// console.log(foo2());
+
+// //return 2 перезапишет return2
+// function foo3() {
+//   try {
+//     return 1;
+//   } finally {
+//     return 2;
+//   }
+// }
+
+// console.log(foo3());
+const baseUrl = "https://jsonplaceholder.typicode.com/posts/1";
+
+async function getPostsAsync() {
+  const fetchOptions = {
+    method: "POST",
+    body: JSON.stringify({ name: "Vlad", age: 32 }),
+  };
+  try {
+    const response = await fetch(baseUrl, fetchOptions);
+    const data = await response.json();
+    console.log(data);
+    if (!response.ok) {
+      throw new Error("Запрос не успешен!");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// getPostsAsync();
+
+//======================================================
+
+const fetchOptions = {
+  method: "POST",
+  body: JSON.stringify({ name: "Vlad", age: 32 }),
+};
+function getDataByPromise() {
+  const promise = fetch(baseUrl, fetchOptions);
+  promise
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Запрос не успешен!");
+      }
+      const data = response.json();
+      return data;
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      return { status: "ok" };
+    })
+    .finally(() => console.log("finally"));
+}
+
+// getDataByPromise();
+
+//POST
+
+//======================================
+//PUT
+const fetchOptions3 = {
+  method: "PUT",
+  body: JSON.stringify({ name: "Tanya", age: 35 }),
+};
+function getDataByPromise() {
+  const promise = fetch(baseUrl, fetchOptions3);
+  promise
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Запрос не успешен!");
+      }
+      const data = response.json();
+      return data;
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      return { status: "ok" };
+    })
+    .finally(() => console.log("finally"));
+}
+
+getDataByPromise();
+
+// async function getPostsAsync3() {
+//   const fetchOptions = {
+//     method: "POST",
+//     body: JSON.stringify({ name: "Vlad", age: 32 }),
+//   };
+//   try {
+//     const response = await fetch(baseUrl, fetchOptions3a);
+//     const data = await response.json();
+//     console.log(data);
+//     if (!response.ok) {
+//       throw new Error("Запрос не успешен!");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+// getPostsAsync3();
+
+const fetchOptions3a = {
+  method: "PUT",
+  body: JSON.stringify({ name: "Tanya", age: 33 }),
+};
+
+async function getPostsAsync3() {
+  try {
+    const response = await fetch(baseUrl, fetchOptions3a);
+    if (!response.ok) throw new Error("Ошибка!!!!!!");
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+getPostsAsync3();
+
+const fetchOptions4 = {
+  method: "DELETE",
+}; // отправляем без боди
